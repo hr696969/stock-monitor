@@ -11,8 +11,9 @@ services:
       - key: TICKERS
         value: PLTR,NVDA,NEM
 
-  - type: static
+  - type: env
     name: stock-frontend
+    env: static
     rootDir: frontend
     buildCommand: >
       bash -lc 'mkdir -p build && cp -r . build &&
