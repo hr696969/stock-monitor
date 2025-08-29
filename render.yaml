@@ -1,7 +1,8 @@
 services:
+  # Backend web service
   - type: web
+    runtime: python
     name: stock-backend
-    env: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
@@ -10,15 +11,19 @@ services:
       - key: TICKERS
         value: PLTR,NVDA,NEM
 
-  - type: static
+  # Static frontend site
+  - type: web
+    runtime: static
     name: stock-frontend
     rootDir: frontend
-    buildCommand: >
-      bash -lc 'mkdir -p build && cp -r . build &&
-      echo "window.API_URL=\"https://$RENDER_SERVICE_HOSTNAME_stock-backend\";" > build/config.js'
+    buildCommand: |
+      bash -lc '
+        mkdir -p build &&
+        cp -r . build &&
+        echo "window.API_URL=\\"https://$RENDER_EXTERNAL_URL_stock-backend\\";" > build/config.js
+      '
     staticPublishPath: build
     headers:
       - path: /*
         name: Cache-Control
         value: no-cache
-    plan: free
