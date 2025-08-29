@@ -1,4 +1,3 @@
-
 services:
   - type: web
     name: stock-backend
@@ -11,15 +10,12 @@ services:
       - key: TICKERS
         value: PLTR,NVDA,NEM
 
-  - type: env
+  - type: web
     name: stock-frontend
-    env: static
     rootDir: frontend
     buildCommand: >
       bash -lc 'mkdir -p build && cp -r . build &&
       echo "window.API_URL=\"https://$RENDER_SERVICE_HOSTNAME_stock-backend\";" > build/config.js'
     staticPublishPath: build
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-cache
+    plan: free
+    envVars: []
